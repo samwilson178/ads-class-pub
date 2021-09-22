@@ -33,6 +33,18 @@ class Fraction:
         :raises: `TypeError` is either numerator or denominator is not an integer
         """
         # TODO: Implement this function
+
+        self._num = numerator
+        self._den = denominator
+        if isinstance(self._num,int)==False:
+            raise TypeError('Numerator must be an integer number')
+        if isinstance(self._den,int)==False:
+            raise TypeError('Denominator must be an integer number')
+        if self._den < 1:
+            raise TypeError('Denominator must be positive')
+        factor = gcd(self._num,self._den)
+        self._num = self._num//factor
+        self._den = self._den//factor
         ...
 
     def get_numerator(self) -> int:
@@ -42,6 +54,7 @@ class Fraction:
         :returns: fraction numerator
         """
         # TODO: Implement this function
+        return self._num
         ...
 
     numerator = property(get_numerator)
@@ -53,6 +66,7 @@ class Fraction:
         :returns: fraction denominator
         """
         # TODO: Implement this function
+        return self._den
         ...
 
     denominator = property(get_denominator)
@@ -64,6 +78,13 @@ class Fraction:
         :returns: fraction as a string
         """
         # TODO: Implement this function
+        if self._num == self._den:
+            return "1"
+        if self._num > self._den:
+            main_number = self._num//self._den
+            new_num = self._num - (main_number * self._den)
+            return f"{main_number} {new_num}/{self._den}"
+        return f"{self._num}/{self._den}"
         ...
 
     def __repr__(self) -> str:
@@ -73,6 +94,7 @@ class Fraction:
         :returns: fraction representation
         """
         # TODO: Implement this function
+        return f"Fraction({self._num}, {self._den})"
         ...
 
     def __eq__(self, other: object) -> bool:
@@ -84,6 +106,14 @@ class Fraction:
         :raises: `TypeError` if another object is not a `Fraction`
         """
         # TODO: Implement this function
+        if isinstance(self,Fraction)==False:
+            raise TypeError("Can only compare Fractions")
+        if isinstance(other,Fraction)==False:
+            raise TypeError("Can only compare Fractions")
+
+        first_n = self._num * other._den
+        second_n = other._num * self._den
+        return first_n==second_n
         ...
 
     def __gt__(self, other: object) -> bool:
@@ -95,6 +125,14 @@ class Fraction:
         :raises: `TypeError` if another object is not a `Fraction`
         """
         # TODO: Implement this function
+        if isinstance(self,Fraction)==False:
+            raise TypeError("Can only compare Fractions")
+        if isinstance(other,Fraction)==False:
+            raise TypeError("Can only compare Fractions")
+        
+        first_d = self._num/self._den
+        second_d = other._num/other._den
+        return first_d > second_d
         ...
 
     def __add__(self, other: object) -> object:
@@ -106,6 +144,14 @@ class Fraction:
         :raises: `TypeError` if another object is not a `Fraction`
         """
         # TODO: Implement this function
+        if isinstance(self,Fraction)==False:
+            raise TypeError("Can only add two Fractions")
+        if isinstance(other,Fraction)==False:
+            raise TypeError("Can only add two Fractions")
+
+        new_num_a = self._num*other._den + self._den*other._num
+        new_den_a = self._den*other._den
+        return Fraction(new_num_a,new_den_a)
         ...
 
     def __sub__(self, other: object) -> object:
@@ -117,6 +163,14 @@ class Fraction:
         :raises: `TypeError` if another object is not a `Fraction`
         """
         # TODO: Implement this function
+        if isinstance(self,Fraction)==False:
+            raise TypeError("Can only subtract two Fractions")
+        if isinstance(other,Fraction)==False:
+            raise TypeError("Can only subtract two Fractions")
+
+        new_num_s = self._num*other._den - self._den*other._num
+        new_den_s = self._den*other._den
+        return Fraction(new_num_s,new_den_s)
         ...
 
     def __mul__(self, other: object) -> object:
@@ -128,6 +182,14 @@ class Fraction:
         :raises: `TypeError` if another object is not a `Fraction`
         """
         # TODO: Implement this function
+        if isinstance(self,Fraction)==False:
+            raise TypeError("Can only multiply two Fractions")
+        if isinstance(other,Fraction)==False:
+            raise TypeError("Can only multiply two Fractions")
+
+        new_num_m = self._num * other._num
+        new_den_m = self._den * other._den
+        return Fraction(new_num_m,new_den_m)
         ...
 
     def __truediv__(self, other: object) -> object:
@@ -139,6 +201,14 @@ class Fraction:
         :raises: `TypeError` if another object is not a `Fraction`
         """
         # TODO: Implement this function
+        if isinstance(self,Fraction)==False:
+            raise TypeError("Can only divide two Fractions")
+        if isinstance(other,Fraction)==False:
+            raise TypeError("Can only divide two Fractions")
+
+        new_num_d = self._num*other._den
+        new_den_d = self._den*other._num
+        return Fraction(new_num_d,new_den_d)
         ...
 
 

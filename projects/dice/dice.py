@@ -28,7 +28,9 @@ class Die:
     def value(self):
         """Get the die value"""
         # TODO: Implement this function
+        return self._value
         ...
+
 
     @value.setter
     def value(self, _):
@@ -38,11 +40,17 @@ class Die:
     def __str__(self):
         """__str__ override"""
         # TODO: Implement this function
+        return f"{self._value}"
         ...
+
+    def __repr__(self):
+        return f"{self._value}"
 
     def roll(self):
         """Roll the die"""
         # TODO: Implement this function
+        self._value = random.choice(self._all_values)
+        return self._value
         ...
 
 
@@ -58,17 +66,24 @@ class FrozenDie(Die):
     def frozen(self) -> bool:
         """Frozen property getter"""
         # TODO: Implement this function
+        return self._frozen
         ...
 
     @frozen.setter
     def frozen(self, new_value: bool) -> None:
         """Frozen property setter"""
         # TODO: Implement this function
+        self._frozen = new_value
+        return self._frozen
         ...
 
     def roll(self):
         """Roll the die"""
         # TODO: Implement this function
+        if self._frozen == True:
+            return self._value
+        elif self.frozen == False:
+            Die.roll(self)
         ...
 
 
@@ -86,26 +101,37 @@ class Cup:
     def __str__(self) -> str:
         """__str__ override"""
         # TODO: Implement this function
+        return f"{self._dice}"
         ...
 
     def shake(self) -> None:
         """Shake a cup"""
         # TODO: Implement this function
+        for a in self:
+            a.roll()
         ...
 
     def add(self, die: Die) -> None:
         """Add a die to the cup"""
         # TODO: Implement this function
+        self._dice.append(die)
         ...
 
     def remove(self, idx: int):
         """Remove a die from the cup"""
         # TODO: Implement this function
+        del self._dice[idx]
         ...
 
     def roll(self, *args) -> None:
         """Roll specific dice"""
         # TODO: Implement this function
+        for a in args:
+            try:
+                d = self._dice[a-1]
+                d.roll()
+            except:
+                pass
         ...
 
 

@@ -39,6 +39,8 @@ class Bird(Animal):
         """Bird __init__"""
         # TODO: Invoke __init__ of the superclass
         # TODO: Initialize self._flying
+        super().__init__(spec_init, age_init, color_init)
+        self._flying = flying_init
         ...
 
     def __str__(self) -> str:
@@ -57,6 +59,11 @@ class Mammal(Animal):
         """Mammal __init__"""
         # TODO: Invoke __init__ of the superclass
         # TODO: If habitat_init is "Land", "Sea", "Air" or "Tree", initialize self._habitat, else raise a ValueError
+        super().__init__(spec_init, age_init, color_init)
+        if habitat_init == "Land" or habitat_init == "Sea" or habitat_init == "Air" or habitat_init == "Tree":
+            self._habitat = habitat_init
+        else:
+            raise ValueError("Incorrect habitat value")
         ...
 
 
@@ -67,12 +74,14 @@ class Parrot(Bird):
         """Parrot __init__"""
         # TODO: Invoke __init__ of the superclass
         # TODO: Initialize self._talking
+        super().__init__("Parrot", age_init, color_init, flying_init=True)
+        self._talking = talking_init
         ...
 
     def sound(self) -> str:
         """Making Parrot noise"""
         if self._talking:
-            return "'Polly wants a cracker'"
+            return "Polly wants a cracker"
         else:
             return "nothing"
 
@@ -116,11 +125,13 @@ class Dog(Canine):
     def __init__(self, age_init: int, color_init: str):
         """Dog __init__"""
         # TODO: Invoke __init__ of the superclass. All dogs live on Land
+        super().__init__("Dog", age_init, color_init, habitat_init="Land")
         ...
 
     def sound(self) -> str:
         """Making Dog noise"""
         # TODO: All dogs say "Woof!"
+        return "Woof!"
         ...
 
 
@@ -138,11 +149,13 @@ class BobCat(Feline):
     def __init__(self, age_init: int, color_init: str, habitat_init: str):
         """BobCat __init__"""
         # TODO: Invoke __init__ of the superclass
+        super().__init__("BobCat", age_init, color_init, habitat_init)
         ...
 
     def __str__(self) -> str:
         """BobCat __str__"""
         # TODO: Return a string to match the expected output
+        return f"{self._color} {self._habitat} Bobcat ({self._age} yo)"
         ...
 
 
