@@ -7,7 +7,10 @@
 """
 
 import pathlib
+import copy
 from collections import deque
+from pythonds3 import Stack,Queue
+
 
 
 class Solver:
@@ -19,6 +22,15 @@ class Solver:
         self.words4: set[str] = set()  # 4-letter words
         self.words5: set[str] = set()  # 5-letter words
         # TODO: Implement this method
+        f = open(filename,'r')
+        words = f.read().splitlines()
+        for line in words:
+            if len(line) == 3:
+                self.words3.add(line)
+            elif len(line) == 4:
+                self.words4.add(line)
+            elif len(line) == 5:
+                self.words5.add(line)
         ...
 
     def distance(self, word1: str, word2: str) -> int:
@@ -31,6 +43,13 @@ class Solver:
         :raise: ValueError if words are not of the same length
         """
         # TODO: Implement this method
+        if len(word1) != len(word2):
+            raise ValueError('Must use words of the same length')
+        dist = 0
+        for i in range(len(word1)):
+            if word1[i] != word2[i]:
+                dist += 1
+        return dist
         ...
 
     def diff_by_one_all(
@@ -44,6 +63,12 @@ class Solver:
         :param used_words: all words that are already used and should not be considered
         """
         # TODO: Implement this method
+        one_diff_words = []
+        for cand in all_words:
+            if cand not in used_words:
+                if self.distance(word,cand) == 1:
+                    one_diff_words.append(cand)
+        return one_diff_words
         ...
 
     def build_ladder(self, word_start: str, word_stop: str) -> list[str]:
@@ -55,6 +80,48 @@ class Solver:
         :return a word ladder as a list
         """
         # TODO: Implement this method
+        used_words = {word_start}
+        if len(word_start) == 3:
+            word_set = self.words3
+        if len(word_start) == 4:
+            word_set = self.words4
+        if len(word_start) == 5:
+            word_set = self.words5
+        init_stack = Stack()
+        init_stack.push(word_start)
+        stack_queue = Queue()
+
+        for word in self.diff_by_one_all(word_start,word_set,used_words):
+            used_words.add(word)
+            temp_stack = Stack()
+            temp_stack._items = copy.deepcopy(init_stack._items)
+            temp_stack.push(word)
+            stack_queue.enqueue(temp_stack)
+
+        found = False
+        while found == False:
+            try:
+                check_stack = stack_queue.dequeue()
+            except:
+                return []
+            if check_stack.peek() == word_stop:
+                found = True
+            else:
+                for word in self.diff_by_one_all(check_stack.peek(),word_set,used_words):
+                   temp_stack = Stack()
+                   temp_stack._items = copy.deepcopy(check_stack._items)
+                   temp_stack.push(word)
+                   used_words.add(word)
+                   stack_queue.enqueue(temp_stack)
+
+        rev_stack = Stack()
+        while check_stack.is_empty() == False:
+            rev_stack.push(check_stack.pop())
+        path_list = []
+        while rev_stack.is_empty() == False:
+            path_list.append(rev_stack.pop())
+
+        return path_list
         ...
 
 

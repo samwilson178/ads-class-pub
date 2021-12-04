@@ -27,5 +27,6 @@
     "src/projects/wordladder",
     "src/projects/kevinbacon",
     "src/projects/interview"
-  ]
+  ],
+  "git.ignoreLimitWarning": true
 }

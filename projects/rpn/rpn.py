@@ -44,6 +44,34 @@ def postfix_eval(postfix_expr: str) -> float:
     8
     """
     # TODO: Implement this function
+    operand_stack = Stack()
+    token_list = postfix_expr.split()
+    token_list.pop()
+    operators = ['+','-','*','/','//','**','%']
+    if len(token_list) == 0:
+        raise StackError('Stack is empty')
+    for token in token_list:
+        if token not in operators:
+            try:
+                token = int(token)
+            except:
+                pass
+            if not isinstance(token,int):
+                raise TokenError(f'Unknown token: {token}')
+        if isinstance(token,int):
+            operand_stack.push(token)
+        if token in operators:
+            operand2 = operand_stack.pop()
+            try:
+                operand1 = operand_stack.pop()
+            except IndexError:
+                raise StackError('pop from empty list')
+            result = do_math(token,operand1,operand2)
+            operand_stack.push(result)
+    answer = operand_stack.pop()
+    if not operand_stack.is_empty():
+        raise StackError('Stack is not empty')
+    return answer
     ...
 
 
@@ -69,6 +97,32 @@ def do_math(operation: str, operand1: int, operand2: int) -> float:
     8
     """
     # TODO: Implement this function
+    operators = ['+','-','*','/','//','**','%']
+    if operation not in operators:
+        raise SyntaxError('invalid syntax')
+    if operation == '+':
+        return operand1 + operand2
+    elif operation == '-':
+        return operand1 - operand2
+    elif operation == '*':
+        return operand1 * operand2
+    elif operation == '/':
+        try:
+            return operand1/operand2
+        except ZeroDivisionError as zde:
+            raise zde
+    elif operation == '//':
+        try:
+            return operand1//operand2
+        except ZeroDivisionError as zde:
+            raise zde
+    elif operation == '%':
+        try:
+            return operand1%operand2
+        except ZeroDivisionError as zde:
+            raise zde
+    elif operation == '**':
+        return operand1 ** operand2
     ...
 
 
@@ -79,6 +133,25 @@ def rpn_calc(filename: str) -> float:
     :return: sum of the results of all *valid* expressions
     """
     # TODO: Implement this function
+    f = open(filename,'r')
+    lines = f.read().splitlines()
+    sum = 0
+    for line in lines:
+        try:
+            output = postfix_eval(line)
+            result = output
+            print(f"{line:60}{result}")
+        except ZeroDivisionError as zde:
+            error = f'ERROR: {zde}'
+            print(f"{line:60}{error}")
+        except StackError as se:
+            error = f'ERROR: {se}'
+            print(f"{line:60}{error}")
+        if type(output)==int or type(output)==float:
+            sum += output
+            output = 0
+    f.close()
+    return round(sum,2)
     ...
 
 

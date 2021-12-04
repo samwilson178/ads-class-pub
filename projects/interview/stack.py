@@ -37,6 +37,7 @@ class Stack:
         :param item: a new item to push onto the stack
         """
         # TODO: Implement this method
+        self.items.put(item)
         ...
 
     def pop(self) -> Any:
@@ -47,6 +48,16 @@ class Stack:
         :raise StackError is the stack is empty
         """
         # TODO: Implement this method
+        if self.items.qsize() == 0:
+            raise StackError('Cannot pop from an empty stack')
+        pop_queue = SimpleQueue()
+        if self.items.qsize() == 1:
+            return self.items.get()
+        while self.items.qsize() != 1:
+            pop_queue.put(self.items.get())
+        while pop_queue.qsize() != 0:
+            self.items.put(pop_queue.get())
+        return self.items.get()
         ...
 
     def peek(self) -> Any:
@@ -57,6 +68,16 @@ class Stack:
         :raise StackError is the stack is empty
         """
         # TODO: Implement this method
+        peek_queue = SimpleQueue()
+        if self.items.qsize() == 0:
+            raise StackError('Nothing to see here, the stack is empty')
+        while self.items.qsize() != 1:
+            peek_queue.put(self.items.get())
+        top_item = self.items.get()
+        peek_queue.put(top_item)
+        while not peek_queue.empty():
+            self.items.put(peek_queue.get())
+        return top_item
         ...
 
     def __bool__(self) -> bool:
@@ -66,6 +87,7 @@ class Stack:
         :return: False if the stack is empty, True otherwise
         """
         # TODO: Implement this method
+        return not self.items.empty()
         ...
 
     def __len__(self) -> int:
@@ -75,4 +97,5 @@ class Stack:
         :return: number of items in the stack (0 if the stack is empty)
         """
         # TODO: Implement this method
+        return self.items.qsize()
         ...

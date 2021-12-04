@@ -20,6 +20,7 @@ def hash_remainder(key: int, size: int) -> int:
     4
     """
     # TODO: Implement this function
+    return key%size
     ...
 
 
@@ -36,6 +37,10 @@ def hash_mid_sqr(key: int, size: int) -> int:
     8
     """
     # TODO: Implement this function
+    squared = str(key*key)
+    temp = squared[len(squared)//2-1]+squared[len(squared)//2]
+    definition = int(temp)%size
+    return definition
     ...
 
 
@@ -52,6 +57,21 @@ def hash_folding(key: str, size: int) -> int:
     3
     """
     # TODO: Implement this function
+    ints = []
+    for char in key:
+        try:
+            new_int = int(char)
+            ints.append(new_int)
+        except:
+            pass
+    addends = []
+    for x in range(0,len(ints)//2):
+        addends.append(int(str(ints[2*x])+str(ints[2*x+1])))
+    sum = 0
+    for num in addends:
+        sum += num
+    definition = sum%size
+    return definition
     ...
 
 
@@ -68,6 +88,10 @@ def hash_str(key: str, size: int) -> int:
     8
     """
     # TODO: Implement this function
+    sum = 0
+    for char in key:
+        sum += ord(char)
+    return sum%size
     ...
 
 
@@ -84,6 +108,12 @@ def hash_str_weighted(key: str, size: int) -> int:
     4
     """
     # TODO: Implement this function
+    sum = 0
+    position = 0
+    for char in key:
+        sum += ord(char)*position
+        position += 1
+    return sum%size
     ...
 
 

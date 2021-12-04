@@ -30,6 +30,17 @@ class Coder:
         :param letter: letter corresponding to the `code_str`
         """
         # TODO: Implement this method
+        current = self.morse_tree
+        for char in code_str:
+            if char == '.':
+                if current.child_left == None:
+                    current.insert_left('')
+                current = current.child_left
+            elif char == '-':
+                if current.child_right == None:
+                    current.insert_right('')
+                current = current.child_right
+        current.root = letter
         ...
 
     def follow_and_retrieve(self, code_str: str) -> str:
@@ -41,6 +52,17 @@ class Coder:
         :raise: ValueError if the code is not found
         """
         # TODO: Implement this method
+        current = self.morse_tree
+        for char in code_str:
+            if char == '.':
+                if current.child_left == None:
+                    raise ValueError(f"Could not find {code_str} in the tree")
+                current = current.child_left
+            elif char == '-':
+                if current.child_right == None:
+                    raise ValueError(f"Could not find {code_str} in the tree")
+                current = current.child_right
+        return current.get_root_val()
         ...
 
     def find_path(self, tree: BinaryTree, letter: str, path: str) -> str:
@@ -54,6 +76,12 @@ class Coder:
         :return: path to the letter
         """
         # TODO: Implement this method
+        if tree == None:
+            return False
+        if tree.root == letter:
+            return path
+        else:
+            return self.find_path(tree.child_left,letter,path+'.') or self.find_path(tree.child_right,letter,path+'-')
         ...
 
     def encode(self, msg: str) -> str:
@@ -64,6 +92,17 @@ class Coder:
         :return: Morse code representation of the the message
         """
         # TODO: Implement this method
+        msg_list = msg.split()
+        code_str = []
+        for word in msg_list:
+            word_list = []
+            for char in word:
+                encoded = self.find_path(self.morse_tree,char,'')
+                if encoded == False:
+                    raise ValueError(f"Could not encode {msg}: {char} is not in the tree")
+                word_list.append(encoded)
+            code_str.append(' '.join(word_list))
+        return " ".join(code_str)
         ...
 
     def decode(self, code: str) -> str:
@@ -74,6 +113,14 @@ class Coder:
         :return: text corresponding to the code
         """
         # TODO: Implement this method
+        message = ''
+        characters = code.split()
+        for char in characters:
+            try:
+                message += self.follow_and_retrieve(char)
+            except:
+                raise ValueError(f"Could not decode {code}: {char} is not in the tree")
+        return message
         ...
 
 

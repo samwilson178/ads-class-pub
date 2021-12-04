@@ -29,7 +29,7 @@ def test_checksum(filename, expected):
         filename = f"projects/rpn/{filename}"
     assert pytest.approx(rpn_calc(f"{filename}.in.txt"), 0.01) == expected
 
-
+ 
 @pytest.mark.parametrize(
     "expression, err_message",
     [

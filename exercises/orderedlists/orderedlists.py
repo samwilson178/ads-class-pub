@@ -17,6 +17,7 @@ class Node:
         """Initializer"""
         self._data = init_data
         self._next: Optional["Node"] = None
+        self._previous: Optional["Node"] = None
 
     def get_data(self) -> Any:
         """Get node data"""
@@ -61,6 +62,19 @@ class OrderedList:
         :raise: `ValueError` if the index is negative
         """
         # TODO: Implement this method
+        if self._head == None:
+            raise IndexError('The list is empty')
+        if position > self._count - 1:
+            raise IndexError('List index out of range: too large')
+        if position < 0:
+            raise ValueError('Invalid position: negative index')
+        
+        current = self._head
+        idx = 0
+        while idx < position:
+            current = current._next
+            idx += 1
+        return current.data
         ...
 
     def __len__(self) -> int:
@@ -102,6 +116,37 @@ class OrderedList:
         :param value: value to add to the list
         """
         # TODO: Implement this method
+        if self._count == 0:
+            self._head = Node(value)
+            self._count += 1
+            return
+
+        if value < self._head.data:
+            new_node = Node(value)
+            new_node.next = self._head
+            self._head = new_node
+            self._count += 1
+            return
+
+        current = self._head
+        idx = 0
+        new_node = Node(value)
+        while value > current.data:
+            if current.next == None:
+                current.next = new_node
+                self._count += 1
+                return
+            current = current.next
+            idx += 1
+        pos = idx
+        idx = 0
+        current = self._head
+        while idx < pos - 1:
+            current = current.next
+            idx += 1
+        new_node.next = current.next
+        current.next = new_node
+        self._count += 1
         ...
 
     def pop(self, position: int = None) -> Any:
@@ -114,6 +159,28 @@ class OrderedList:
         :raise: `ValueError` if the index is negative
         """
         # TODO: Implement this method
+        if self._count == 0:
+            raise IndexError('The list is empty')
+        if position and position > self._count - 1:
+            raise IndexError('List index out of range: too large')
+        if position and position < 0:
+            raise ValueError('Invalid position: negative index')
+        if position == None:
+            position = self._count - 1
+        if position == 0:
+            result = self._head.data
+            self._head = self._head.next
+            self._count -= 1
+            return result
+        current = self._head
+        current_idx = 0
+        while current_idx < position-1:
+            current = current.next
+            current_idx += 1
+        result = current.next.data
+        current.next = current.next.next
+        self._count -= 1
+        return result
         ...
 
     def append(self, value: Any) -> None:
@@ -122,6 +189,7 @@ class OrderedList:
         :param value: value to add to the list
         """
         # TODO: Implement this method
+        self.add(value)
         ...
 
     def insert(self, position: int, value: Any) -> None:
@@ -131,6 +199,7 @@ class OrderedList:
         :param value: value to add to the list
         """
         # TODO: Implement this method
+        self.add(value)
         ...
 
     def search(self, value: Any) -> bool:
@@ -155,6 +224,16 @@ class OrderedList:
         :return: first position of the value, -1 if not found
         """
         # TODO: Implement this method
+        if self._head == None:
+            return -1
+        current = self._head
+        idx = 0
+        while current.data != value:
+            if current.next == None:
+                return -1
+            current = current.next
+            idx += 1
+        return idx
         ...
 
 

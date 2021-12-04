@@ -161,6 +161,7 @@ class Graph:
     def __len__(self) -> int:
         """Graph's size"""
         # TODO: Implement this method
+        return len(self.vertices)
         ...
 
     def hub(self) -> Vertex:
@@ -171,6 +172,7 @@ class Graph:
     def size(self) -> int:
         """Find the number of edges in a Graph"""
         # TODO: Implement this method
+        
         ...
 
     def dijkstra(self, start: Vertex) -> None:
