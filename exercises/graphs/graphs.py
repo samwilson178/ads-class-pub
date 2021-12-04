@@ -167,12 +167,26 @@ class Graph:
     def hub(self) -> Vertex:
         """Find a Vertex with the most outgoing edges"""
         # TODO: Implement this method
+        max_vertex = Vertex('foo')
+        for key in self.vertices.keys():
+            vertex = self.vertices[key]
+            if len(vertex.all_neighbors) > len(max_vertex.all_neighbors):
+                max_vertex = vertex
+        return max_vertex.key
         ...
 
     def size(self) -> int:
         """Find the number of edges in a Graph"""
         # TODO: Implement this method
-        
+        count = 0
+        used = []
+        for key in self.vertices.keys():
+            vertex = self.vertices[key]
+            used.append(vertex)
+            for neighbor in vertex.all_neighbors:
+                if neighbor not in used:
+                    count += 1
+        return count
         ...
 
     def dijkstra(self, start: Vertex) -> None:
