@@ -18,12 +18,38 @@ def read_file(filename: str) -> Graph:
     """Build a graph from the file"""
     the_graph: Graph = Graph()
     # TODO: Implement this function
+    movies = {}
+    with open(filename,'r') as f:
+        for line in f:
+            line = line.strip()
+            movie,actor = line.split('|')
+            if movie not in movies.keys():
+                movies[movie] = [actor]
+            else:
+                movies[movie].append(actor)
+    for movie in movies.keys():
+        for from_actor in movies[movie]:
+            for to_actor in movies[movie]:
+                if from_actor != to_actor:
+                    the_graph.add_edge(from_actor,to_actor,movie)
+    return the_graph
     ...
 
 
 def find_max_kbn_actors(graph: Graph) -> list[str]:
     """Find actor(s) with the highest KBN value"""
     # TODO: Implement this function
+    max_actors = []
+    max_distance = 0
+    for actor in graph._vertices.keys():
+        if graph._vertices[actor].distance == sys.maxsize:
+            pass
+        elif graph._vertices[actor].distance > max_distance:
+            max_actors = [actor]
+            max_distance = graph._vertices[actor].distance
+        elif graph._vertices[actor].distance == max_distance:
+            max_actors.append(actor)
+    return max_actors
     ...
 
 
@@ -78,6 +104,22 @@ def main():
 
     actor = " ".join(args.actor) or high_kbn_lst[0]
     # TODO: Keep asking the user to enter a name until the user enters an empty line
+    while True:
+        actor = input("What Actor would you like to trace? (exit to exit) ")
+        if actor == 'exit':
+            break
+        if not the_graph.get_vertex(actor):
+            print('Invalid Input, try again')
+        else:
+            distance = the_graph.get_vertex(actor).get_distance()
+            path = []
+            current = the_graph.get_vertex(actor)
+            while current:
+                path.append(current)
+                current = current.previous
+            for i in range(len(path)-1):
+                print(f'{i+1}) {path[i].key} acted with {path[i+1].key} in {the_graph._edges[(path[i].key,path[i+1].key)]}')
+            print(f"{actor}'s Kevin Bacon number is {distance}")
     ...
 
 
